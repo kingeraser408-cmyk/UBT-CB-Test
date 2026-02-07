@@ -6,7 +6,6 @@
     <title>2026 UBT & Colour Blind Test</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        /* ... (မူလပေးထားသော CSS အားလုံးကို ဤနေရာတွင် ထားပါ) ... */
         :root { --primary: #00b4db; --dark: #12192c; --white: #ffffff; --danger: #ff0055; --success: #2ecc71; --gold: #d4af37; --telegram: #0088cc; }
         body { font-family: sans-serif; margin: 0; background: #f0f2f5; color: #333; overflow-x: hidden; }
         .page { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
@@ -29,9 +28,9 @@
         .top-bar { width: 100%; background: #1a233a; color: white; padding: 12px; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
         .q-card { width: 100%; max-width: 600px; background: white; padding: 20px; border-radius: 10px; margin-top: 20px; border-top: 5px solid var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         #q-text { font-size: 18px; margin: 15px 0; color: #333; line-height: 1.8; word-break: break-word; }
-        .audio-btn { background: #ffc107; border: none; padding: 12px 20px; border-radius: 25px; margin: 10px 0; cursor: pointer; font-weight: bold; width: 100%; }
         .option { background: white; border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin: 10px 0; display: flex; align-items: center; cursor: pointer; transition: 0.2s; width: 100%; max-width: 600px; box-sizing: border-box; }
         .option.active { border: 2px solid var(--primary); background: #e1f5fe; }
+        .opt-num { width: 30px; height: 30px; border: 1px solid #333; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 15px; flex-shrink: 0; }
         .result-container { background: white; border-radius: 15px; padding: 25px; width: 100%; max-width: 500px; text-align: center; color: #333; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         .status-badge { font-size: 48px; font-weight: bold; margin-bottom: 10px; }
         .review-scroll { max-height: 200px; overflow-y: auto; background: #f8f9fa; border-radius: 10px; padding: 10px; text-align: left; margin: 15px 0; border: 1px solid #eee; }
@@ -39,18 +38,15 @@
         .side-menu { position: fixed; right: -300px; top: 0; width: 280px; height: 100vh; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.2); transition: 0.3s; z-index: 1002; padding: 20px; box-sizing: border-box; overflow-y: auto; }
         .side-menu.open { right: 0; }
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 25px; }
-        .num-btn { padding: 10px 0; border: 1px solid #ddd; text-align: center; border-radius: 5px; cursor: pointer; font-size: 13px; background: #f8f9fa; color: #333; }
-        #cb-page { background: var(--dark); }
-        .cb-img { width: 250px; height: 250px; border-radius: 50%; border: 5px solid white; margin: 20px 0; display: block; margin-left: auto; margin-right: auto; }
+        .num-btn { padding: 10px 0; border: 1px solid #ddd; text-align: center; border-radius: 5px; cursor: pointer; font-size: 13px; background: #f8f9fa; }
+        .cb-img { width: 250px; height: 250px; border-radius: 50%; border: 5px solid white; margin: 20px 0; }
     </style>
 </head>
 <body>
 
 <div id="login-page" class="page active-page">
     <div class="brand-container">
-        <div class="main-logo">
-            <div class="logo-inner"><span>UBT</span></div>
-        </div>
+        <div class="main-logo"><div class="logo-inner"><span>UBT</span></div></div>
         <div class="brand-name">2026 UBT SYSTEM</div>
         <div class="promo-tag">PASS 100%</div>
     </div>
@@ -86,11 +82,16 @@
         <button class="btn" style="background:#2c3e50;" onclick="nextQ()">NEXT</button>
     </div>
     <div class="palette-toggle" onclick="toggleMenu()">QUESTIONS ☰</div>
-    <div id="side-menu" class="side-menu"><div id="exam-grid" class="grid"></div><button onclick="finishPartOne()">FINISH</button></div>
+    <div id="side-menu" class="side-menu"><div id="exam-grid" class="grid"></div><button class="btn" onclick="finishPartOne()" style="background:var(--danger)">FINISH</button></div>
 </div>
 
 <div id="cb-page" class="page">
-    <div class="card"><div class="header">COLOR BLIND TEST</div><img id="cb-display-img" class="cb-img"><input type="number" id="cb-input"><button class="btn" onclick="nextCB()">NEXT</button></div>
+    <div class="card" style="text-align: center;">
+        <div class="header">COLOR BLIND TEST</div>
+        <img id="cb-display-img" class="cb-img">
+        <input type="number" id="cb-input" placeholder="ဂဏန်းရိုက်ပါ">
+        <button class="btn" onclick="nextCB()">NEXT</button>
+    </div>
 </div>
 
 <div id="result-page" class="page">
@@ -100,18 +101,13 @@
         <p id="final-stats"></p>
         <div class="review-scroll" id="review-list"></div>
         
-        <button id="download-btn" class="btn" style="background:var(--gold); display:none; margin-bottom: 10px; width: 100%;" onclick="generateCertificate()">DOWNLOAD CERTIFICATE (PDF)</button>
+        <button id="download-btn" class="btn" style="background:var(--gold); display:none; width: 100%;" onclick="generateCertificate()">DOWNLOAD CERTIFICATE (PDF)</button>
 
-        <div class="contact-group" style="width: 100%;">
-            <a href="https://t.me/NewUBT2026" target="_blank" class="contact-btn tg-btn">✈ Telegram မှ ဆက်သွယ်ရန်</a>
-            <a href="tel:09450052637" class="contact-btn ph-btn">📞 09450052637 သို့ ဖုန်းခေါ်ဆိုရန်</a>
-        </div>
-        <button class="btn" style="background:#2c3e50; width: 100%;" onclick="location.reload()">TRY AGAIN</button>
+        <button class="btn" style="background:#2c3e50; width: 100%; margin-top: 10px;" onclick="location.reload()">TRY AGAIN</button>
     </div>
 </div>
 
 <script>
-    /* ... (မူလ Script များ အားလုံး အောက်ပါ generateCertificate အပိုင်းအထိ အပြောင်းအလဲမရှိပါ) ... */
     const apiURL = "https://script.google.com/macros/s/AKfycbzAaoD10U0qH3B4zpoTxi1HfIUfnLWjald9uz9IF9W-yY6ZDAkfFbnU_UMN2yQBjt2P/exec";
     let questions = [], current = 0, answers = [], audioLogs = {}, timeLeft = 50 * 60;
     let cbList = [1, 2, 3, 4, 5], cbIdx = 0;
@@ -125,16 +121,12 @@
         try {
             const res = await fetch(apiURL);
             let rawData = await res.json();
-            let readingQs = rawData.filter(q => !q.audio);
-            let listeningQs = rawData.filter(q => q.audio);
-            readingQs.sort(() => Math.random() - 0.5);
-            listeningQs.sort(() => Math.random() - 0.5);
-            questions = [...readingQs, ...listeningQs];
+            questions = rawData.sort(() => Math.random() - 0.5).slice(0, 40);
             questions.forEach(q => {
-                let optionsWithMeta = q.options.map((text, index) => ({ text, isCorrect: index === q.ans }));
-                optionsWithMeta.sort(() => Math.random() - 0.5);
-                q.shuffledOptions = optionsWithMeta.map(o => o.text);
-                q.newAnsIndex = optionsWithMeta.findIndex(o => o.isCorrect);
+                let opts = q.options.map((t, i) => ({t, c: i === q.ans}));
+                opts.sort(() => Math.random() - 0.5);
+                q.shuffledOptions = opts.map(o => o.t);
+                q.newAnsIndex = opts.findIndex(o => o.c);
             });
             answers = new Array(questions.length).fill(null);
             renderQ();
@@ -145,18 +137,17 @@
     function renderQ() {
         const q = questions[current];
         document.getElementById('q-no').innerText = `Question ${current + 1}`;
-        document.getElementById('q-category').innerText = q.audio ? "[듣기 - Listening]" : "[읽기 - Reading]";
         document.getElementById('q-text').innerHTML = q.text || "";
         const img = document.getElementById('q-img');
         if(q.img) { img.src = q.img; img.style.display = "block"; } else { img.style.display = "none"; }
         const optDiv = document.getElementById('options-container');
         optDiv.innerHTML = "";
         q.shuffledOptions.forEach((opt, i) => {
-            optDiv.innerHTML += `<div class="option ${answers[current]===i?'active':''}" onclick="setAns(${i})"><div class="opt-num">${i+1}</div><div>${opt}</div></div>`;
+            optDiv.innerHTML += `<div class="option ${answers[current]===i?'active':''}" onclick="setAns(${i})"><div class="opt-num">${i+1}</div>${opt}</div>`;
         });
-        updatePalette();
     }
-    function setAns(i) { answers[current] = i; renderQ(); }
+
+    function setAns(i) { answers[current] = i; renderQ(); updatePalette(); }
     function nextQ() { if(current < questions.length-1) { current++; renderQ(); } }
     function prevQ() { if(current > 0) { current--; renderQ(); } }
     function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
@@ -164,12 +155,13 @@
         const grid = document.getElementById('exam-grid'); grid.innerHTML = "";
         questions.forEach((_, i) => {
             const btn = document.createElement('div');
-            btn.className = `num-btn ${answers[i] !== null ? 'done' : ''} ${i === current ? 'current' : ''}`;
+            btn.className = `num-btn ${answers[i] !== null ? 'done' : ''}`;
             btn.innerText = i + 1;
-            btn.onclick = () => { current = i; renderQ(); };
+            btn.onclick = () => { current = i; renderQ(); toggleMenu(); };
             grid.appendChild(btn);
         });
     }
+
     function startTimer() { setInterval(() => { if(timeLeft > 0) timeLeft--; }, 1000); }
     function finishPartOne() { document.getElementById('exam-page').classList.remove('active-page'); document.getElementById('cb-page').classList.add('active-page'); loadCB(); }
     function loadCB() { document.getElementById('cb-display-img').src = `cb${cbList[cbIdx]}.jpg`; }
@@ -183,74 +175,70 @@
         document.getElementById('final-score').innerText = `Score: ${score}`;
         if(score >= 95) {
             document.getElementById('status-badge').innerText = "PASS";
+            document.getElementById('status-badge').style.color = "var(--success)";
             document.getElementById('download-btn').style.display = "block";
         } else {
             document.getElementById('status-badge').innerText = "FAIL";
+            document.getElementById('status-badge').style.color = "var(--danger)";
         }
     }
 
-    // PDF Download Function (အဓိက ပြင်ဆင်ထားသည့် အပိုင်း)
+    // PDF Download Function (အဓိကပြင်ဆင်ထားသောအပိုင်း)
     function generateCertificate() {
         try {
+            if (!window.jspdf) {
+                alert("Library မတက်သေးပါ။ ခဏစောင့်ပေးပါ။");
+                return;
+            }
+
             const { jsPDF } = window.jspdf;
-            // PDF size ကို a4, Landscape ('l') အနေနဲ့ သတ်မှတ်
             const doc = new jsPDF({
-                orientation: 'l',
+                orientation: 'landscape',
                 unit: 'mm',
                 format: 'a4'
             });
 
-            const name = document.getElementById('user-name').value.toUpperCase() || "CANDIDATE";
-            const scoreText = document.getElementById('final-score').innerText;
+            const name = document.getElementById('user-name').value.toUpperCase() || "STUDENT";
+            const score = document.getElementById('final-score').innerText;
             const job = document.getElementById('user-job').value;
-            const dateStr = new Date().toLocaleDateString();
 
-            // Background & Border
-            doc.setFillColor(245, 245, 240); 
+            // Design
+            doc.setFillColor(245, 245, 240);
             doc.rect(0, 0, 297, 210, 'F');
-            doc.setDrawColor(212, 175, 55); 
-            doc.setLineWidth(5); 
+            doc.setDrawColor(212, 175, 55);
+            doc.setLineWidth(5);
             doc.rect(10, 10, 277, 190);
-            doc.setLineWidth(1); 
-            doc.rect(13, 13, 271, 184);
 
-            // Text Styles
-            doc.setTextColor(20, 30, 60); 
-            doc.setFontSize(40); 
-            doc.setFont("times", "bold");
+            doc.setTextColor(20, 30, 60);
+            doc.setFontSize(35);
             doc.text("CERTIFICATE OF COMPLETION", 148, 50, { align: "center" });
 
-            doc.setFontSize(18); 
-            doc.setFont("helvetica", "normal");
-            doc.text("This is to certify that", 148, 75, { align: "center" });
-            
-            doc.setFontSize(35); 
+            doc.setFontSize(18);
+            doc.text("This is to certify that", 148, 80, { align: "center" });
+
+            doc.setFontSize(30);
             doc.setTextColor(0, 180, 219);
-            doc.text(name, 148, 95, { align: "center" });
+            doc.text(name, 148, 100, { align: "center" });
 
-            doc.setFontSize(18); 
+            doc.setFontSize(16);
             doc.setTextColor(20, 30, 60);
-            doc.text(`has successfully passed the UBT Model Exam for ${job}`, 148, 115, { align: "center" });
-            
-            doc.setFontSize(22); 
-            doc.setFont("times", "bold");
-            doc.text(`FINAL SCORE: ${scoreText}`, 148, 135, { align: "center" });
+            doc.text(`Successfully passed the UBT Model Exam for ${job}`, 148, 120, { align: "center" });
+            doc.text(score, 148, 135, { align: "center" });
 
-            doc.setFontSize(12); 
-            doc.setFont("helvetica", "italic");
-            doc.text(`Date Issued: ${dateStr}`, 50, 170);
+            doc.setFontSize(12);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 50, 170);
             doc.text("Authorized by: PPA Exam Center", 240, 170, { align: "right" });
 
-            // ဖုန်းထဲသို့ အလိုအလျောက် Download ကျအောင်လုပ်ခြင်း
-            doc.save(`Certificate_${name}.pdf`);
+            // Phone download trigger
+            doc.save(`UBT_Certificate_${name}.pdf`);
 
-        } catch (error) {
-            console.error(error);
-            alert("PDF ထုတ်ယူရာတွင် အမှားအယွင်းရှိနေပါသည်။ ကျေးဇူးပြု၍ Browser ပြန်ဖွင့်ပြီး ထပ်စမ်းကြည့်ပါ။");
+        } catch (e) {
+            console.error(e);
+            alert("Error: PDF ဖန်တီး၍မရပါ။ Browser ကို refresh လုပ်ကြည့်ပါ။");
         }
     }
 
-    async function viewResults() { /* ... (မူလအတိုင်း) ... */ }
+    async function viewResults() { /* ... */ }
 </script>
 </body>
 </html>
