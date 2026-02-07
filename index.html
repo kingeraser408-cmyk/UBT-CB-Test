@@ -3,17 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UBT Category Randomized System</title>
+    <title>2026 UBT & Colour Blind Test</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        :root { --primary: #00b4db; --dark: #12192c; --white: #ffffff; --danger: #ff0055; --success: #2ecc71; --gold: #d4af37; }
+        :root { --primary: #00b4db; --dark: #12192c; --white: #ffffff; --danger: #ff0055; --success: #2ecc71; --gold: #d4af37; --telegram: #0088cc; }
         body { font-family: sans-serif; margin: 0; background: #f0f2f5; color: #333; overflow-x: hidden; }
         .page { display: none; min-height: 100vh; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
         .active-page { display: flex; }
+        
+        /* New Premium Logo CSS */
+        .brand-container { text-align: center; margin-bottom: 20px; padding: 10px; }
+        .main-logo { width: 80px; height: 80px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; border: 3px solid var(--gold); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); position: relative; }
+        .logo-inner { width: 60px; height: 60px; background: linear-gradient(135deg, #ff0000 50%, #0000ff 50%); border-radius: 50%; display: flex; align-items: center; justify-content: center; transform: rotate(-15deg); }
+        .logo-inner span { color: white; font-weight: bold; font-size: 14px; transform: rotate(15deg); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .brand-name { font-size: 24px; font-weight: 800; background: linear-gradient(to right, #00d2ff, #91eae4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+        .promo-tag { background: var(--gold); color: #000; font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: 10px; display: inline-block; vertical-align: middle; margin-top: -10px; }
+
         .card { width: 100%; max-width: 450px; background: #161b22; border-radius: 15px; border: 1px solid #30363d; color: white; padding-bottom: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         .header { background: linear-gradient(90deg, #00d2ff, #3a7bd5); padding: 15px; text-align: center; font-weight: bold; }
         input, select { width: 85%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #30363d; background: #0d1117; color: white; }
-        .btn { width: 85%; padding: 15px; border: none; background: linear-gradient(90deg, #00f260, #0575e6); color: white; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .btn { width: 85%; padding: 15px; border: none; background: linear-gradient(90deg, #00f260, #0575e6); color: white; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 5px; }
+        
+        /* Contact Buttons Styling */
+        .contact-group { width: 85%; margin: 15px auto; display: flex; flex-direction: column; gap: 8px; }
+        .contact-btn { padding: 10px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
+        .tg-btn { background: var(--telegram); border: 1px solid #0077b5; }
+        .ph-btn { background: var(--success); border: 1px solid #27ae60; }
+        .contact-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
         #exam-page { background: #f0f2f5; justify-content: flex-start; }
         .top-bar { width: 100%; background: #1a233a; color: white; padding: 12px; display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
         .q-card { width: 100%; max-width: 600px; background: white; padding: 20px; border-radius: 10px; margin-top: 20px; border-top: 5px solid var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -25,7 +42,7 @@
         .opt-num { width: 30px; height: 30px; border: 1px solid #333; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 15px; flex-shrink: 0; color: #333; }
         .result-container { background: white; border-radius: 15px; padding: 25px; width: 100%; max-width: 500px; text-align: center; color: #333; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         .status-badge { font-size: 48px; font-weight: bold; margin-bottom: 10px; }
-        .review-scroll { max-height: 250px; overflow-y: auto; background: #f8f9fa; border-radius: 10px; padding: 10px; text-align: left; margin: 15px 0; border: 1px solid #eee; }
+        .review-scroll { max-height: 200px; overflow-y: auto; background: #f8f9fa; border-radius: 10px; padding: 10px; text-align: left; margin: 15px 0; border: 1px solid #eee; }
         .review-line { padding: 8px; border-bottom: 1px solid #e0e0e0; font-size: 14px; }
         .correct-ans { color: var(--success); font-weight: bold; }
         .wrong-ans { color: var(--danger); font-weight: bold; }
@@ -43,6 +60,17 @@
 <body>
 
 <div id="login-page" class="page active-page">
+    <div class="brand-container">
+        <div class="main-logo">
+            <div class="logo-inner">
+                <span>UBT</span>
+            </div>
+        </div>
+        <div class="brand-name">2026 UBT SYSTEM</div>
+        <div class="promo-tag">PASS 100%</div>
+        <p style="color: #8b949e; font-size: 12px; margin-top: 5px;">EPS Korea Exam Preparation</p>
+    </div>
+
     <div class="card">
         <div class="header">UBT & Colour Blind Randomized System</div>
         <center>
@@ -54,6 +82,17 @@
                 <option>Fishery (어업)</option>
             </select>
             <button class="btn" onclick="startExam()">START EXAM</button>
+            
+            <div class="contact-group">
+                <p style="margin: 5px 0; font-size: 13px; color: #d4af37; font-weight: bold;">[ သင်တန်းအပ်ရန် ဆက်သွယ်ရန် ]</p>
+                <a href="https://t.me/NewUBT2026" target="_blank" class="contact-btn tg-btn">
+                    ✈ Telegram Join
+                </a>
+                <a href="tel:09450052637" class="contact-btn ph-btn">
+                    📞 09450052637 သို့ ဖုန်းခေါ်ဆိုရန်
+                </a>
+            </div>
+
             <p style="font-size: 12px; color: #58a6ff; cursor: pointer; margin-top: 15px;" onclick="viewResults()">VIEW FINAL RESULTS</p>
         </center>
     </div>
@@ -103,8 +142,20 @@
         <h2 id="final-score" style="margin: 0;">Score: 0</h2>
         <p id="final-stats"></p>
         <div class="review-scroll" id="review-list"></div>
-        <button id="download-btn" class="btn" style="background:var(--gold); display:none; margin-bottom: 10px;" onclick="generateCertificate()">DOWNLOAD CERTIFICATE (PDF)</button>
-        <button class="btn" style="background:#2c3e50;" onclick="location.reload()">TRY AGAIN</button>
+        
+        <button id="download-btn" class="btn" style="background:var(--gold); display:none; margin-bottom: 10px; width: 100%;" onclick="generateCertificate()">DOWNLOAD CERTIFICATE (PDF)</button>
+
+        <div class="contact-group" style="width: 100%;">
+            <p style="margin: 5px 0; font-size: 13px; color: #333; font-weight: bold;">[ အသေးစိတ်စုံစမ်းရန်/သင်တန်းအပ်ရန် ]</p>
+            <a href="https://t.me/NewUBT2026" target="_blank" class="contact-btn tg-btn">
+                ✈ Telegram မှ ဆက်သွယ်ရန်
+            </a>
+            <a href="tel:09450052637" class="contact-btn ph-btn">
+                📞 09450052637 သို့ ဖုန်းခေါ်ဆိုရန်
+            </a>
+        </div>
+
+        <button class="btn" style="background:#2c3e50; width: 100%;" onclick="location.reload()">TRY AGAIN</button>
     </div>
 </div>
 
@@ -123,19 +174,14 @@
             const res = await fetch(apiURL);
             let rawData = await res.json();
             
-            // ၁။ 읽기 (Reading) နှင့် 듣기 (Listening) ခွဲခြားခြင်း
-            // မေးခွန်းတွင် audio ပါလျှင် Listening ဟု သတ်မှတ်သည် (Google Sheet column ပေါ်မူတည်၍ ပြင်နိုင်သည်)
             let readingQs = rawData.filter(q => !q.audio);
             let listeningQs = rawData.filter(q => q.audio);
 
-            // ၂။ ကဏ္ဍတစ်ခုချင်းစီကို Shuffle လုပ်ခြင်း
             readingQs.sort(() => Math.random() - 0.5);
             listeningQs.sort(() => Math.random() - 0.5);
 
-            // ၃။ Reading အရင်၊ Listening နောက်မှ ပေါင်းစည်းခြင်း
             questions = [...readingQs, ...listeningQs];
             
-            // ၄။ အဖြေများကို Shuffle လုပ်ခြင်း (မေးခွန်းတစ်ခုချင်းစီအတွက်)
             questions.forEach(q => {
                 let optionsWithMeta = q.options.map((text, index) => ({ text, isCorrect: index === q.ans }));
                 optionsWithMeta.sort(() => Math.random() - 0.5);
@@ -276,36 +322,52 @@
     }
 
     function generateCertificate() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('l', 'mm', 'a4');
-        const name = document.getElementById('user-name').value.toUpperCase();
-        const score = document.getElementById('final-score').innerText;
-        const job = document.getElementById('user-job').value;
+        try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'mm', 'a4');
+            const name = document.getElementById('user-name').value.toUpperCase();
+            const scoreText = document.getElementById('final-score').innerText;
+            const job = document.getElementById('user-job').value;
 
-        doc.setFillColor(245, 245, 240); doc.rect(0, 0, 297, 210, 'F');
-        doc.setDrawColor(212, 175, 55); doc.setLineWidth(5); doc.rect(10, 10, 277, 190);
-        doc.setLineWidth(1); doc.rect(13, 13, 271, 184);
+            doc.setFillColor(245, 245, 240); 
+            doc.rect(0, 0, 297, 210, 'F');
+            doc.setDrawColor(212, 175, 55); 
+            doc.setLineWidth(5); 
+            doc.rect(10, 10, 277, 190);
+            doc.setLineWidth(1); 
+            doc.rect(13, 13, 271, 184);
 
-        doc.setTextColor(20, 30, 60); doc.setFontSize(40); doc.setFont("times", "bold");
-        doc.text("CERTIFICATE OF COMPLETION", 148, 50, { align: "center" });
+            doc.setTextColor(20, 30, 60); 
+            doc.setFontSize(40); 
+            doc.setFont("times", "bold");
+            doc.text("CERTIFICATE OF COMPLETION", 148, 50, { align: "center" });
 
-        doc.setFontSize(18); doc.setFont("helvetica", "normal");
-        doc.text("This is to certify that", 148, 75, { align: "center" });
-        
-        doc.setFontSize(35); doc.setTextColor(0, 180, 219);
-        doc.text(name, 148, 95, { align: "center" });
+            doc.setFontSize(18); 
+            doc.setFont("helvetica", "normal");
+            doc.text("This is to certify that", 148, 75, { align: "center" });
+            
+            doc.setFontSize(35); 
+            doc.setTextColor(0, 180, 219);
+            doc.text(name, 148, 95, { align: "center" });
 
-        doc.setFontSize(18); doc.setTextColor(20, 30, 60);
-        doc.text(`has successfully passed the UBT Model Exam for ${job}`, 148, 115, { align: "center" });
-        
-        doc.setFontSize(22); doc.setFont("times", "bold");
-        doc.text(`FINAL SCORE: ${score}`, 148, 135, { align: "center" });
+            doc.setFontSize(18); 
+            doc.setTextColor(20, 30, 60);
+            doc.text(`has successfully passed the UBT Model Exam for ${job}`, 148, 115, { align: "center" });
+            
+            doc.setFontSize(22); 
+            doc.setFont("times", "bold");
+            doc.text(`FINAL SCORE: ${scoreText}`, 148, 135, { align: "center" });
 
-        doc.setFontSize(12); doc.setFont("helvetica", "italic");
-        doc.text(`Date: ${new Date().toLocaleDateString()}`, 50, 170);
-        doc.text("Authorized by: PPA Exam Center", 240, 170, { align: "right" });
+            doc.setFontSize(12); 
+            doc.setFont("helvetica", "italic");
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 50, 170);
+            doc.text("Authorized by: PPA Exam Center", 240, 170, { align: "right" });
 
-        doc.save(`${name}_Certificate.pdf`);
+            doc.save(`${name}_Certificate.pdf`);
+        } catch (error) {
+            console.error(error);
+            alert("PDF ထုတ်ယူရာတွင် အမှားအယွင်းရှိနေပါသည်။");
+        }
     }
 
     async function viewResults() {
@@ -319,4 +381,4 @@
     }
 </script>
 </body>
-</html
+</html>
