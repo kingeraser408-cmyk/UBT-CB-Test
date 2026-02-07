@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>2026 UBT & Colour Blind Test</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root { --primary: #00b4db; --dark: #12192c; --white: #ffffff; --danger: #ff0055; --success: #2ecc71; --gold: #d4af37; --telegram: #0088cc; }
         body { font-family: sans-serif; margin: 0; background: #f0f2f5; color: #333; overflow-x: hidden; }
@@ -143,8 +142,6 @@
         <p id="final-stats"></p>
         <div class="review-scroll" id="review-list"></div>
         
-        <button id="download-btn" class="btn" style="background:var(--gold); display:none; margin-bottom: 10px; width: 100%;" onclick="generateCertificate()">DOWNLOAD CERTIFICATE (PDF)</button>
-
         <div class="contact-group" style="width: 100%;">
             <p style="margin: 5px 0; font-size: 13px; color: #333; font-weight: bold;">[ အသေးစိတ်စုံစမ်းရန်/သင်တန်းအပ်ရန် ]</p>
             <a href="https://t.me/NewUBT2026" target="_blank" class="contact-btn tg-btn">
@@ -312,72 +309,11 @@
 
         if(score >= 95) {
             badge.innerText = "PASS"; badge.style.color = "var(--success)";
-            document.getElementById('download-btn').style.display = "block";
         } else {
             badge.innerText = "FAIL"; badge.style.color = "var(--danger)";
-            document.getElementById('download-btn').style.display = "none";
         }
         const data = { name: document.getElementById('user-name').value, sector: document.getElementById('user-job').value, score: score };
         fetch(apiURL, { method: "POST", body: JSON.stringify(data) });
-    }
-
-    function generateCertificate() {
-        try {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('l', 'mm', 'a4');
-            const name = document.getElementById('user-name').value.toUpperCase();
-            const scoreText = document.getElementById('final-score').innerText;
-            const job = document.getElementById('user-job').value;
-
-            doc.setFillColor(245, 245, 240); 
-            doc.rect(0, 0, 297, 210, 'F');
-            doc.setDrawColor(212, 175, 55); 
-            doc.setLineWidth(5); 
-            doc.rect(10, 10, 277, 190);
-            doc.setLineWidth(1); 
-            doc.rect(13, 13, 271, 184);
-
-            doc.setTextColor(20, 30, 60); 
-            doc.setFontSize(40); 
-            doc.setFont("times", "bold");
-            doc.text("CERTIFICATE OF COMPLETION", 148, 50, { align: "center" });
-
-            doc.setFontSize(18); 
-            doc.setFont("helvetica", "normal");
-            doc.text("This is to certify that", 148, 75, { align: "center" });
-            
-            doc.setFontSize(35); 
-            doc.setTextColor(0, 180, 219);
-            doc.text(name, 148, 95, { align: "center" });
-
-            doc.setFontSize(18); 
-            doc.setTextColor(20, 30, 60);
-            doc.text(`has successfully passed the UBT Model Exam for ${job}`, 148, 115, { align: "center" });
-            
-            doc.setFontSize(22); 
-            doc.setFont("times", "bold");
-            doc.text(`FINAL SCORE: ${scoreText}`, 148, 135, { align: "center" });
-
-            doc.setFontSize(12); 
-            doc.setFont("helvetica", "italic");
-            doc.text(`Date: ${new Date().toLocaleDateString()}`, 50, 170);
-            doc.text("Authorized by: PPA Exam Center", 240, 170, { align: "right" });
-
-            // Phone download fix using Blob
-            const pdfOutput = doc.output('blob');
-            const url = URL.createObjectURL(pdfOutput);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `${name}_Certificate.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            
-        } catch (error) {
-            console.error(error);
-            alert("PDF ထုတ်ယူရာတွင် အမှားအယွင်းရှိနေပါသည်။");
-        }
     }
 
     async function viewResults() {
